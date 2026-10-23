@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="930" viewBox="0 0 1400 930" role="img" aria-labelledby="title desc">
+  <title id="title">Phone tilt projected into sway axes at navel height</title>
+  <desc id="desc">A front view shows an upright phone at the navel and the left-right sway axis. A top-down waist-level view shows left-right x and front-back y axes, with roll mapped to x and pitch mapped to y. Formulas match the app's current code.</desc>
+  <defs>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cf3d42"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2478a8"/>
+    </marker>
+    <marker id="arrow-dark" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#384653"/>
+    </marker>
+  </defs>
+  <rect width="1400" height="930" fill="#f4f7f8"/>
+  <text x="60" y="58" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="32" font-weight="700" fill="#172a35">From phone tilt to the sway plane</text>
+  <text x="60" y="96" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#52636e">Phone upright against the abdomen, with its screen facing forward.</text>
+
+  <rect x="50" y="130" width="560" height="660" rx="16" fill="#ffffff" stroke="#d8e0e4" stroke-width="2"/>
+  <text x="82" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="21" font-weight="700" fill="#263944">FRONT VIEW</text>
+  <text x="82" y="204" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#60717b">You are looking at the person from the front</text>
+
+  <circle cx="330" cy="277" r="50" fill="#e2eaed" stroke="#657883" stroke-width="3"/>
+  <path d="M307 327 L307 348 L353 348 L353 327" fill="#e2eaed" stroke="#657883" stroke-width="3"/>
+  <path d="M245 358 Q270 343 307 347 L353 347 Q390 343 415 358 L439 485 Q443 509 421 516 L397 506 L389 445 L389 542 Q330 566 271 542 L271 445 L263 506 L239 516 Q217 509 221 485 Z" fill="#e2eaed" stroke="#657883" stroke-width="3"/>
+  <path d="M271 542 Q330 564 389 542 L382 597 Q330 615 278 597 Z" fill="#d6e1e5" stroke="#657883" stroke-width="3"/>
+  <path d="M290 599 L326 599 L321 716 L293 716 Z M334 599 L370 599 L367 716 L339 716 Z" fill="#e2eaed" stroke="#657883" stroke-width="3"/>
+  <path d="M293 716 L321 716 L316 739 L278 739 Q278 726 293 716 Z M339 716 L367 716 Q382 726 382 739 L344 739 Z" fill="#d6e1e5" stroke="#657883" stroke-width="3"/>
+
+  <line x1="118" y1="500" x2="540" y2="500" stroke="#cf3d42" stroke-width="4" marker-start="url(#arrow-red)" marker-end="url(#arrow-red)"/>
+  <circle cx="330" cy="500" r="8" fill="#ffffff" stroke="#cf3d42" stroke-width="4"/>
+  <rect x="308" y="459" width="44" height="82" rx="8" fill="#263944" stroke="#ffffff" stroke-width="3"/>
+  <rect x="314" y="468" width="32" height="63" rx="3" fill="#bfe0ee"/>
+  <circle cx="330" cy="536" r="2.5" fill="#263944"/>
+  <path d="M357 476 C390 453 408 449 439 449" fill="none" stroke="#384653" stroke-width="2" marker-end="url(#arrow-dark)"/>
+  <text x="444" y="445" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="600" fill="#263944">Phone upright</text>
+  <text x="444" y="465" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#52636e">at the navel</text>
+  <text x="330" y="572" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="700" fill="#cf3d42">x: left ↔ right</text>
+  <text x="330" y="626" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#52636e">Front/back (y) points into and out of this view.</text>
+  <circle cx="330" cy="661" r="12" fill="none" stroke="#2478a8" stroke-width="3"/>
+  <circle cx="330" cy="661" r="4" fill="#2478a8"/>
+  <text x="354" y="667" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#2478a8">toward viewer</text>
+  <circle cx="330" cy="704" r="12" fill="none" stroke="#2478a8" stroke-width="3"/>
+  <path d="M322 696 L338 712 M338 696 L322 712" stroke="#2478a8" stroke-width="3"/>
+  <text x="354" y="710" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#2478a8">away from viewer</text>
+
+  <rect x="640" y="130" width="710" height="660" rx="16" fill="#ffffff" stroke="#d8e0e4" stroke-width="2"/>
+  <text x="672" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="21" font-weight="700" fill="#263944">TOP-DOWN SLICE AT NAVEL HEIGHT</text>
+  <text x="672" y="204" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#60717b">This is the horizontal plane represented by the chart</text>
+
+  <ellipse cx="1002" cy="483" rx="166" ry="207" fill="#e2eaed" stroke="#657883" stroke-width="3"/>
+  <path d="M905 337 Q1002 296 1099 337" fill="none" stroke="#a3b4bc" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="1002" y="263" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="600" fill="#52636e">FRONT / belly side</text>
+  <text x="1002" y="727" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="600" fill="#52636e">BACK</text>
+
+  <rect x="967" y="309" width="70" height="48" rx="8" fill="#263944" stroke="#ffffff" stroke-width="3"/>
+  <rect x="974" y="315" width="56" height="35" rx="3" fill="#bfe0ee"/>
+  <circle cx="1002" cy="352" r="2" fill="#263944"/>
+  <text x="1080" y="322" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="600" fill="#263944">Phone is on</text>
+  <text x="1080" y="342" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#52636e">the front surface</text>
+  <path d="M1072 345 L1040 341" fill="none" stroke="#384653" stroke-width="2" marker-end="url(#arrow-dark)"/>
+
+  <line x1="824" y1="357" x2="1180" y2="357" stroke="#cf3d42" stroke-width="4" marker-start="url(#arrow-red)" marker-end="url(#arrow-red)"/>
+  <line x1="1002" y1="236" x2="1002" y2="557" stroke="#2478a8" stroke-width="4" marker-start="url(#arrow-blue)" marker-end="url(#arrow-blue)"/>
+  <circle cx="1002" cy="357" r="8" fill="#ffffff" stroke="#263944" stroke-width="3"/>
+  <text x="1002" y="391" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="700" fill="#cf3d42">x / roll (γ): left ↔ right</text>
+  <text x="1020" y="246" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="700" fill="#2478a8">y / pitch (β)</text>
+  <text x="1020" y="270" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#2478a8">front ↕ back</text>
+
+  <path d="M1182 600 L1182 551" stroke="#cf3d42" stroke-width="3" marker-end="url(#arrow-red)"/>
+  <text x="1202" y="571" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" fill="#cf3d42">x</text>
+  <path d="M1182 600 L1231 600" stroke="#2478a8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <text x="1238" y="605" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" fill="#2478a8">y</text>
+  <text x="1204" y="633" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" fill="#52636e">axes are perpendicular</text>
+  <text x="1204" y="652" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" fill="#52636e">in the waist-level plane</text>
+
+  <rect x="50" y="812" width="1300" height="88" rx="14" fill="#eaf1f4" stroke="#d0dce1" stroke-width="2"/>
+  <text x="78" y="847" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="#263944">Current code (angles in radians; pivot height H = 100 cm):</text>
+  <text x="78" y="881" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600" fill="#cf3d42">x = H · sin(roll γ)</text>
+  <text x="430" y="881" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600" fill="#2478a8">y = H · sin(pitch β)</text>
+  <text x="880" y="850" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#52636e">For overlays, each trial's path is shifted</text>
+  <text x="880" y="874" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#52636e">so its own mean lies at the origin.</text>
+</svg>

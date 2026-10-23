@@ -1,0 +1,105 @@
+import Storage from 'expo-sqlite/kv-store';
+import { useEffect, useRef, useState } from 'react';
+import type { StabilityMetrics, TrialAggregate, TrialShape } from '@/lib/stability';
+import { toTrialShape } from '@/lib/stability';
+
+const STORAGE_KEY = 'stabilometer.series-history.v1';
+
+export type MeasurementCondition = 'Without orthosis' | 'With orthosis';
+
+export interface SavedSeries {
+  id: string;
+  recordedAt: string;
+  condition: MeasurementCondition;
+  label?: string;
+  aggregate: TrialAggregate;
+  trialAreasCm2: number[];
+  trialPathLengthsMm?: number[];
+  durationS?: number;
+  /** Centred paths and ellipses used by the chart; absent on series saved before charting existed. */
+  trialShapes?: TrialShape[];
+}
+
+function parseHistory(value: string | null): SavedSeries[] {
+  if (!value) return [];
+
+  try {
+    const parsed: unknown = JSON.parse(value);
+    return Array.isArray(parsed) ? (parsed as SavedSeries[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function useSeriesHistory() {
+  const [history, setHistory] = useState<SavedSeries[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const writeQueueRef = useRef<Promise<void>>(Promise.resolve());
+
+  function updateHistory(transform: (current: SavedSeries[]) => SavedSeries[]) {
+    const operation = writeQueueRef.current.then(async () => {
+      const stored = await Storage.getItem(STORAGE_KEY);
+      const nextHistory = transform(parseHistory(stored));
+      if (nextHistory.length === 0) {
+        await Storage.removeItem(STORAGE_KEY);
+      } else {
+        await Storage.setItem(STORAGE_KEY, JSON.stringify(nextHistory));
+      }
+      setHistory(nextHistory);
+    });
+    writeQueueRef.current = operation.catch(() => undefined);
+    return operation;
+  }
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadHistory() {
+      try {
+        const stored = await Storage.getItem(STORAGE_KEY);
+        if (isMounted) setHistory(parseHistory(stored));
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    }
+
+    void loadHistory();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  async function saveSeries(
+    condition: MeasurementCondition,
+    aggregate: TrialAggregate,
+    trials: StabilityMetrics[],
+    durationS: number,
+  ) {
+    const savedSeries: SavedSeries = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      recordedAt: new Date().toISOString(),
+      condition,
+      aggregate,
+      trialAreasCm2: trials.map((trial) => trial.swayAreaCm2),
+      trialPathLengthsMm: trials.map((trial) => trial.pathLengthCm * 10),
+      durationS,
+      trialShapes: trials.map(toTrialShape),
+    };
+
+    await updateHistory((current) => [savedSeries, ...current]);
+  }
+
+  async function clearHistory() {
+    await updateHistory(() => []);
+  }
+
+  async function updateSeriesLabel(id: string, label: string) {
+    await updateHistory((current) => current.map((series) => (series.id === id ? { ...series, label } : series)));
+  }
+
+  async function deleteSeries(id: string) {
+    await updateHistory((current) => current.filter((series) => series.id !== id));
+  }
+
+  return { history, isLoading, saveSeries, clearHistory, updateSeriesLabel, deleteSeries };
+}

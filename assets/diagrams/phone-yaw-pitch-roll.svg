@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1050" viewBox="0 0 1500 1050" role="img" aria-labelledby="title desc">
+  <title id="title">Yaw, pitch and roll of a portrait phone</title>
+  <desc id="desc">A portrait phone coordinate frame and three panels showing the Expo DeviceMotion angles: yaw alpha around Z, pitch beta around X, and roll gamma around Y. The app's sway estimate uses pitch and roll, not yaw.</desc>
+  <defs>
+    <marker id="arrow-x" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#c73c42"/></marker>
+    <marker id="arrow-y" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#268653"/></marker>
+    <marker id="arrow-z" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#277da5"/></marker>
+    <marker id="arrow-arc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#425563"/></marker>
+  </defs>
+  <rect width="1500" height="1050" fill="#f4f7f8"/>
+  <text x="60" y="58" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="33" font-weight="700" fill="#172a35">Yaw, pitch and roll of the phone</text>
+  <text x="60" y="96" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" fill="#52636e">Axes and angles follow Expo DeviceMotion's portrait-device convention.</text>
+
+  <rect x="50" y="125" width="1400" height="245" rx="16" fill="#ffffff" stroke="#d8e0e4" stroke-width="2"/>
+  <text x="82" y="166" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="700" fill="#263944">PHONE AXES (portrait, screen facing you)</text>
+  <rect x="197" y="192" width="108" height="150" rx="16" fill="#263944" stroke="#15232b" stroke-width="2"/>
+  <rect x="205" y="201" width="92" height="132" rx="9" fill="#d8edf5"/>
+  <rect x="231" y="206" width="40" height="4" rx="2" fill="#95b9c8"/>
+  <circle cx="251" cy="322" r="3" fill="#8aaab7"/>
+  <line x1="120" y1="266" x2="380" y2="266" stroke="#c73c42" stroke-width="4" marker-start="url(#arrow-x)" marker-end="url(#arrow-x)"/>
+  <line x1="251" y1="350" x2="251" y2="184" stroke="#268653" stroke-width="4" marker-start="url(#arrow-y)" marker-end="url(#arrow-y)"/>
+  <circle cx="251" cy="266" r="13" fill="#ffffff" stroke="#277da5" stroke-width="3"/>
+  <circle cx="251" cy="266" r="5" fill="#277da5"/>
+  <path d="M271 265 L423 226" fill="none" stroke="#277da5" stroke-width="3" marker-end="url(#arrow-z)"/>
+  <text x="392" y="270" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="700" fill="#c73c42">X: left ↔ right</text>
+  <text x="271" y="190" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="700" fill="#268653">Y: bottom ↕ top</text>
+  <text x="435" y="226" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="700" fill="#277da5">+Z: out through screen</text>
+  <text x="435" y="249" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#52636e">(dot-in-circle denotes +Z)</text>
+
+  <line x1="760" y1="190" x2="760" y2="335" stroke="#d8e0e4" stroke-width="2"/>
+  <text x="805" y="214" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="#263944">Expo DeviceMotion rotations</text>
+  <circle cx="825" cy="253" r="8" fill="#277da5"/>
+  <text x="846" y="259" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" fill="#263944">α (alpha) about Z</text>
+  <circle cx="825" cy="291" r="8" fill="#c73c42"/>
+  <text x="846" y="297" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" fill="#263944">β (beta) about X</text>
+  <circle cx="825" cy="329" r="8" fill="#268653"/>
+  <text x="846" y="335" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" fill="#263944">γ (gamma) about Y</text>
+
+  <rect x="50" y="395" width="440" height="440" rx="16" fill="#ffffff" stroke="#d8e0e4" stroke-width="2"/>
+  <text x="78" y="438" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="21" font-weight="700" fill="#263944">YAW · α · about Z</text>
+  <text x="78" y="468" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#60717b">Spin around the screen-normal axis</text>
+  <g transform="rotate(-17 270 630)" opacity="0.3">
+    <rect x="214" y="520" width="112" height="190" rx="18" fill="none" stroke="#277da5" stroke-width="4" stroke-dasharray="8 6"/>
+  </g>
+  <g transform="rotate(17 270 630)">
+    <rect x="214" y="520" width="112" height="190" rx="18" fill="#263944" stroke="#15232b" stroke-width="2"/>
+    <rect x="222" y="532" width="96" height="160" rx="10" fill="#d8edf5"/>
+    <rect x="249" y="537" width="42" height="4" rx="2" fill="#95b9c8"/>
+    <circle cx="270" cy="681" r="3" fill="#8aaab7"/>
+  </g>
+  <circle cx="270" cy="630" r="15" fill="#fff" stroke="#277da5" stroke-width="3"/>
+  <circle cx="270" cy="630" r="6" fill="#277da5"/>
+  <path d="M188 593 C187 526 354 511 360 588" fill="none" stroke="#425563" stroke-width="3" marker-end="url(#arrow-arc)"/>
+  <text x="270" y="754" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#52636e">Front view: the phone spins within its screen plane.</text>
+  <text x="270" y="782" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#277da5">The blue dot marks the Z axis coming toward you.</text>
+
+  <rect x="530" y="395" width="440" height="440" rx="16" fill="#ffffff" stroke="#d8e0e4" stroke-width="2"/>
+  <text x="558" y="438" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="21" font-weight="700" fill="#263944">PITCH · β · about X</text>
+  <text x="558" y="468" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#60717b">Tilt around the left-right screen axis</text>
+  <text x="600" y="555" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" fill="#52636e">FRONT</text>
+  <path d="M631 620 L720 620" stroke="#277da5" stroke-width="3" marker-end="url(#arrow-z)"/>
+  <text x="641" y="608" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" fill="#277da5">+Z / screen front</text>
+  <g opacity="0.3">
+    <rect x="730" y="524" width="37" height="185" rx="8" fill="none" stroke="#c73c42" stroke-width="4" stroke-dasharray="8 6"/>
+  </g>
+  <g transform="rotate(-19 748 617)">
+    <rect x="730" y="524" width="37" height="185" rx="8" fill="#263944" stroke="#15232b" stroke-width="2"/>
+    <rect x="737" y="535" width="6" height="160" rx="2" fill="#d8edf5"/>
+  </g>
+  <circle cx="748" cy="617" r="15" fill="#fff" stroke="#c73c42" stroke-width="3"/>
+  <circle cx="748" cy="617" r="6" fill="#c73c42"/>
+  <path d="M696 536 C642 559 641 675 694 696" fill="none" stroke="#425563" stroke-width="3" marker-end="url(#arrow-arc)"/>
+  <text x="801" y="596" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#c73c42">+X points</text>
+  <text x="801" y="617" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#52636e">across the</text>
+  <text x="801" y="638" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#52636e">phone width</text>
+  <text x="750" y="754" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#52636e">Side view: the face tips toward or away from the viewer.</text>
+  <text x="750" y="782" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#c73c42">The red dot marks the X axis pointing across the phone.</text>
+
+  <rect x="1010" y="395" width="440" height="440" rx="16" fill="#ffffff" stroke="#d8e0e4" stroke-width="2"/>
+  <text x="1038" y="438" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="21" font-weight="700" fill="#263944">ROLL · γ · about Y</text>
+  <text x="1038" y="468" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#60717b">Rotate around the phone's long axis</text>
+  <g transform="rotate(-12 1230 620)" opacity="0.3">
+    <rect x="1174" y="520" width="112" height="190" rx="18" fill="none" stroke="#268653" stroke-width="4" stroke-dasharray="8 6"/>
+  </g>
+  <g transform="rotate(12 1230 620)" opacity="0.75">
+    <path d="M1286 540 L1306 552 L1306 710 L1286 698 Z" fill="#a9c0ca" stroke="#52636e" stroke-width="2"/>
+    <rect x="1174" y="520" width="112" height="190" rx="18" fill="#263944" stroke="#15232b" stroke-width="2"/>
+    <rect x="1182" y="532" width="96" height="160" rx="10" fill="#d8edf5"/>
+    <rect x="1209" y="537" width="42" height="4" rx="2" fill="#95b9c8"/>
+  </g>
+  <line x1="1230" y1="502" x2="1230" y2="738" stroke="#268653" stroke-width="4" marker-start="url(#arrow-y)" marker-end="url(#arrow-y)"/>
+  <path d="M1164 550 C1120 591 1131 666 1175 688" fill="none" stroke="#425563" stroke-width="3" marker-end="url(#arrow-arc)"/>
+  <text x="1320" y="590" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#268653">Y axis runs</text>
+  <text x="1320" y="611" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#52636e">bottom to top</text>
+  <text x="1230" y="754" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#52636e">The phone twists around its long dimension.</text>
+  <text x="1230" y="782" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#268653">The green axis runs from bottom to top of the screen.</text>
+
+  <rect x="50" y="860" width="1400" height="150" rx="16" fill="#eaf1f4" stroke="#d0dce1" stroke-width="2"/>
+  <text x="80" y="900" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="700" fill="#263944">How this app uses the angles</text>
+  <text x="80" y="944" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600" fill="#c73c42">x = H · sin(roll γ) = H · sin(rotation.gamma)</text>
+  <text x="80" y="978" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600" fill="#277da5">y = H · sin(pitch β) = H · sin(rotation.beta)</text>
+  <text x="865" y="943" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#52636e">H = 100 cm in the current model. Yaw α is stored</text>
+  <text x="865" y="970" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#52636e">but is not used to calculate these two distances.</text>
+</svg>
