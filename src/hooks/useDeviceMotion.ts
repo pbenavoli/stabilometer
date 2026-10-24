@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DeviceMotion, type DeviceMotionMeasurement } from 'expo-sensors';
 
 export const SENSOR_UPDATE_INTERVAL_MS = 20; // ~50 Hz
@@ -7,15 +7,12 @@ export type DeviceMotionStatus = 'checking' | 'unavailable' | 'denied' | 'ready'
 
 interface UseDeviceMotionResult {
   status: DeviceMotionStatus;
-  latest: DeviceMotionMeasurement | null;
   /** Subscribes to sensor updates; call the returned cleanup to unsubscribe. */
   subscribe: (onMeasurement: (m: DeviceMotionMeasurement) => void) => () => void;
 }
 
 export function useDeviceMotion(): UseDeviceMotionResult {
   const [status, setStatus] = useState<DeviceMotionStatus>('checking');
-  const [latest, setLatest] = useState<DeviceMotionMeasurement | null>(null);
-  const previewSubscriptionRef = useRef<ReturnType<typeof DeviceMotion.addListener> | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -45,19 +42,12 @@ export function useDeviceMotion(): UseDeviceMotionResult {
 
       DeviceMotion.setUpdateInterval(SENSOR_UPDATE_INTERVAL_MS);
       setStatus('ready');
-
-      // Lightweight preview stream so the UI can show live readings before a session starts.
-      previewSubscriptionRef.current = DeviceMotion.addListener((measurement) => {
-        setLatest(measurement);
-      });
     }
 
     setup();
 
     return () => {
       cancelled = true;
-      previewSubscriptionRef.current?.remove();
-      previewSubscriptionRef.current = null;
     };
   }, []);
 
@@ -67,5 +57,5 @@ export function useDeviceMotion(): UseDeviceMotionResult {
     return () => subscription.remove();
   }, []);
 
-  return { status, latest, subscribe };
+  return { status, subscribe };
 }

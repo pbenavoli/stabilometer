@@ -4,6 +4,7 @@ import { commonStyles } from '@/components/commonStyles';
 import { type ChartLayer, getChartScale, OverlayChart } from '@/components/OverlayChart';
 import { useAppState } from '@/context/AppStateProvider';
 import type { MeasurementCondition, SavedSeries } from '@/hooks/useSeriesHistory';
+import { SWAY_MODEL_VERSION } from '@/lib/stability';
 
 const CONDITIONS = ['Without orthosis', 'With orthosis'] as const;
 const CONDITION_COLORS: Record<MeasurementCondition, string> = {
@@ -13,7 +14,9 @@ const CONDITION_COLORS: Record<MeasurementCondition, string> = {
 const MAX_CHART_SIZE = 520;
 
 const isChartable = (series: SavedSeries) =>
-  Boolean(series.trialShapes?.length) && typeof series.durationS === 'number';
+  Boolean(series.trialShapes?.length) &&
+  typeof series.durationS === 'number' &&
+  series.swayModel === SWAY_MODEL_VERSION;
 
 const seriesName = (series: SavedSeries) => series.label?.trim() || new Date(series.recordedAt).toLocaleString();
 
@@ -91,7 +94,7 @@ export default function ChartScreen() {
               })}
               {unavailableCount > 0 && (
                 <Text style={styles.hint}>
-                  {unavailableCount} older series saved without path data cannot be charted.
+                  {unavailableCount} older series recorded with the earlier sway model cannot be charted.
                 </Text>
               )}
             </View>

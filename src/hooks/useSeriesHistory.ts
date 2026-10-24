@@ -1,7 +1,7 @@
 import Storage from 'expo-sqlite/kv-store';
 import { useEffect, useRef, useState } from 'react';
 import type { StabilityMetrics, TrialAggregate, TrialShape } from '@/lib/stability';
-import { toTrialShape } from '@/lib/stability';
+import { SWAY_MODEL_VERSION, toTrialShape } from '@/lib/stability';
 
 const STORAGE_KEY = 'stabilometer.series-history.v1';
 
@@ -18,6 +18,8 @@ export interface SavedSeries {
   durationS?: number;
   /** Centred paths and ellipses used by the chart; absent on series saved before charting existed. */
   trialShapes?: TrialShape[];
+  /** Version of the sway maths used; absent or older means the values came from the flawed Euler-angle model. */
+  swayModel?: number;
 }
 
 function parseHistory(value: string | null): SavedSeries[] {
@@ -74,16 +76,20 @@ export function useSeriesHistory() {
     aggregate: TrialAggregate,
     trials: StabilityMetrics[],
     durationS: number,
+    label?: string,
   ) {
+    const trimmedLabel = label?.trim();
     const savedSeries: SavedSeries = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       recordedAt: new Date().toISOString(),
       condition,
+      ...(trimmedLabel ? { label: trimmedLabel } : {}),
       aggregate,
       trialAreasCm2: trials.map((trial) => trial.swayAreaCm2),
       trialPathLengthsMm: trials.map((trial) => trial.pathLengthCm * 10),
       durationS,
       trialShapes: trials.map(toTrialShape),
+      swayModel: SWAY_MODEL_VERSION,
     };
 
     await updateHistory((current) => [savedSeries, ...current]);
@@ -97,8 +103,8 @@ export function useSeriesHistory() {
     await updateHistory((current) => current.map((series) => (series.id === id ? { ...series, label } : series)));
   }
 
-  async function deleteSeries(id: string) {
-    await updateHistory((current) => current.filter((series) => series.id !== id));
+  async function deleteSeries(ids: string[]) {
+    await updateHistory((current) => current.filter((series) => !ids.includes(series.id)));
   }
 
   return { history, isLoading, saveSeries, clearHistory, updateSeriesLabel, deleteSeries };

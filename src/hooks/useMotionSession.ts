@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import type { DeviceMotionMeasurement } from 'expo-sensors';
+import { toMotionSample } from '@/lib/orientation';
 import type { MotionSample } from '@/types/motion';
 
 export type SessionState = 'idle' | 'countdown' | 'recording' | 'done';
@@ -78,16 +79,8 @@ export function useMotionSession(
     onRecordingStart?.();
 
     unsubscribeRef.current = subscribe((m) => {
-      if (!m.acceleration) return;
-      samplesRef.current.push({
-        t: Date.now() - startTimeRef.current,
-        pitch: m.rotation.beta,
-        roll: m.rotation.gamma,
-        yaw: m.rotation.alpha,
-        ax: m.acceleration.x,
-        ay: m.acceleration.y,
-        az: m.acceleration.z,
-      });
+      const sample = toMotionSample(m, Date.now() - startTimeRef.current);
+      if (sample) samplesRef.current.push(sample);
     });
 
     clearTimer();

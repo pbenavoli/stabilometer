@@ -9,7 +9,8 @@ Stabilometer is an Expo / React Native app for recording and comparing phone-mot
 - Per-trial sway path, estimated cumulative path length, mean sway speed, 95% sway ellipse area, and an at-a-glance stability index.
 - Locally saved series with condition labels and editable series names.
 - Overlay chart comparing one `Without orthosis` series and one `With orthosis` series of the same duration. Paths and 95% ellipse outlines are shown in red and green respectively.
-- Local options, series history, individual deletion, and clear-all controls.
+- Local options, series history, multi-select deletion, and clear-all controls.
+- A **Live** tab that shows the current lean angles, a bubble level, and the raw yaw/pitch/roll values, for checking the sensor and the axis directions.
 
 ## Requirements
 
@@ -59,27 +60,31 @@ The iOS internal distribution build may require registering the device with the 
 2. Open **Options** if you want to change trials per series or trial duration. Options cannot be changed mid-series.
 3. Place the phone upright against the abdomen at navel height, screen facing outward. Tap start, wait through the countdown, and hold the phone steadily during the recording. The trial ends automatically at the selected duration; it can also be stopped manually.
 4. Continue until the configured number of trials is complete. The completed series is saved locally.
-5. On **Series**, review, label, or remove saved series.
+5. On **Series**, review and label saved series. To remove some, press and hold a series: checkboxes appear and a bar at the top shows the number selected, an **All / None** toggle and a trash can. Tap series to select or deselect them, then tap the trash can and confirm. The ✕ cancels the selection.
 6. On **Chart**, use **Configure chart** to choose one series per condition. Once one series is selected, the other condition is restricted to series with the same trial duration. **Clear chart** removes the current selections.
 
 The chart's `Unit: … cm` label is its grid spacing. `Front` / `Back` identify the vertical direction; `Left` / `Right` identify the horizontal direction.
 
+Use the **Live** tab to check the sensor before recording: lean forward, back, left and right and confirm the bubble and the angles move in the expected direction.
+
 ## How the estimates work
 
-DeviceMotion reports orientation angles in radians. The current model converts roll and pitch into estimated horizontal displacements with an inverted-pendulum approximation:
+DeviceMotion reports the gravity direction in the phone's own frame. With the phone upright against the abdomen and its screen facing outward, the app treats the lean of that direction as the body's lean and converts it into estimated horizontal displacements with an inverted-pendulum approximation:
 
 ```text
-x = H * sin(roll)
-y = H * sin(pitch)
+x = H * (-gx / |g|)    left / right, positive to the wearer's right
+y = H * ( gz / |g|)    front / back, positive forward
 ```
 
-Here, `H` is the assumed pivot-to-phone height, currently 100 cm. Each charted trial path is centered on its own mean. The 95% sway area is calculated from the covariance ellipse of the estimated path. Saved chart paths are downsampled to approximately one point every 200 ms.
+Here `g` is gravity in the phone frame (`accelerationIncludingGravity - acceleration`) and `H` is the assumed pivot-to-phone height, currently 100 cm. Yaw, pitch and roll are deliberately not used: with the phone upright, pitch sits near 90° where these Euler angles are ill-conditioned, which flattens one axis and inflates the other. Each charted trial path is centered on its own mean. The 95% sway area is calculated from the covariance ellipse of the estimated path. Saved chart paths are downsampled to approximately one point every 200 ms.
 
 These measurements are **estimates**, not direct measurements from a force platform. The fixed height, phone placement, posture and device orientation affect the results. Keep placement and test conditions consistent when comparing series. The stability index is an arbitrary comparison aid and is not clinically validated. The app is not a medical device.
 
 ## Local data
 
 Measurement options and saved series are stored on the device using `expo-sqlite/kv-store`. No account or remote sync is configured. Saved series include summary metrics and compact chart paths; raw motion samples are used during the active measurement but are not stored in the series history. Removing a series or clearing history deletes the corresponding local records.
+
+Each saved series records the version of the sway model that produced it. Series recorded with the earlier yaw/pitch/roll model have inaccurate values: they are flagged in the **Series** tab and cannot be added to the chart. Remove them and record new series.
 
 ## Development checks
 

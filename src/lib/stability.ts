@@ -1,8 +1,9 @@
+import { tiltSines } from '@/lib/orientation';
 import type { MotionSample } from '@/types/motion';
 
 /**
  * Approximate distance (cm) from the ankles (sway pivot point) to the phone,
- * used to convert tilt angle into an equivalent lateral/anterior-posterior
+ * used to convert the body's lean into an equivalent lateral/anterior-posterior
  * displacement — the same inverted-pendulum approximation used in clinical
  * posturography when deriving sway from trunk-mounted sensors instead of a
  * force platform. This is a stand-in for the person's real height and can be
@@ -13,11 +14,14 @@ export const DEFAULT_PIVOT_HEIGHT_CM = 100;
 
 const CHI_SQUARE_95_DF2 = 5.991;
 
+/** Bump when the displacement maths changes so older saved series can be told apart. */
+export const SWAY_MODEL_VERSION = 2;
+
 export interface SwayPoint {
   t: number;
-  /** Medio-lateral displacement estimate, cm. */
+  /** Medio-lateral displacement estimate, cm (positive to the wearer's right). */
   x: number;
-  /** Anterior-posterior displacement estimate, cm. */
+  /** Anterior-posterior displacement estimate, cm (positive forward). */
   y: number;
 }
 
@@ -50,12 +54,17 @@ export interface StabilityMetrics {
   stabilityIndex: number;
 }
 
-/** Converts a motion sample's tilt angles into an estimated sway displacement, in cm. */
+/**
+ * Converts a sample's lean into an estimated sway displacement, in cm.
+ * The lean comes from the gravity direction in the phone's frame; Euler angles are not used because
+ * they are singular when the phone is held upright.
+ */
 export function sampleToSwayPoint(sample: MotionSample, pivotHeightCm: number): SwayPoint {
+  const tilt = tiltSines(sample.gx, sample.gy, sample.gz) ?? { right: 0, forward: 0 };
   return {
     t: sample.t,
-    x: pivotHeightCm * Math.sin(sample.roll),
-    y: pivotHeightCm * Math.sin(sample.pitch),
+    x: pivotHeightCm * tilt.right,
+    y: pivotHeightCm * tilt.forward,
   };
 }
 

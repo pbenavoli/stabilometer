@@ -1,6 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Keyboard, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { commonStyles } from '@/components/commonStyles';
 import { OptionStepper } from '@/components/OptionStepper';
 import { ReadoutRow } from '@/components/ReadoutRow';
@@ -25,6 +25,7 @@ export default function MeasureScreen() {
   const { playStart, playEnd } = useSessionSounds();
   const [trials, setTrials] = useState<StabilityMetrics[]>([]);
   const [condition, setCondition] = useState<MeasurementCondition>('Without orthosis');
+  const [defaultLabel, setDefaultLabel] = useState('');
   const [showOptions, setShowOptions] = useState(false);
   const session = useMotionSession(subscribe, {
     durationMs: options.durationS * 1000,
@@ -36,6 +37,7 @@ export default function MeasureScreen() {
   });
 
   const handleStart = () => {
+    Keyboard.dismiss();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setIsMeasuring(true);
     session.start();
@@ -71,14 +73,14 @@ export default function MeasureScreen() {
   useEffect(() => {
     if (seriesComplete && aggregate && !savedSeriesRef.current) {
       savedSeriesRef.current = true;
-      void saveSeries(condition, aggregate, trials, options.durationS).catch((error: unknown) =>
+      void saveSeries(condition, aggregate, trials, options.durationS, defaultLabel).catch((error: unknown) =>
         console.warn('[series history] Could not save series:', error),
       );
     }
     if (!seriesComplete) {
       savedSeriesRef.current = false;
     }
-  }, [aggregate, condition, options.durationS, saveSeries, seriesComplete, trials]);
+  }, [aggregate, condition, defaultLabel, options.durationS, saveSeries, seriesComplete, trials]);
 
   const startNewSeries = () => {
     setTrials([]);
@@ -113,7 +115,10 @@ export default function MeasureScreen() {
   }
 
   return (
-    <ScrollView alwaysBounceVertical={false} contentContainerStyle={styles.container}>
+    <ScrollView
+      alwaysBounceVertical={false}
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled">
       <Text style={commonStyles.title}>Stabilometer</Text>
       <Text style={commonStyles.subtitle}>Sensor status: {status}</Text>
 
@@ -145,9 +150,21 @@ export default function MeasureScreen() {
                   </Pressable>
                 ))}
               </View>
+              <Text style={styles.conditionLabel}>Default series label</Text>
+              <TextInput
+                accessibilityLabel="Default series label"
+                maxLength={60}
+                placeholder="Optional, applied to the new series"
+                returnKeyType="done"
+                style={styles.labelInput}
+                value={defaultLabel}
+                onChangeText={setDefaultLabel}
+              />
             </View>
           ) : (
-            <Text style={styles.conditionStatus}>{condition}</Text>
+            <Text style={styles.conditionStatus}>
+              {defaultLabel.trim() ? `${condition} · ${defaultLabel.trim()}` : condition}
+            </Text>
           )}
           <Pressable style={styles.bigButton} onPress={handleStart}>
             <Text style={styles.bigButtonText}>
@@ -255,6 +272,15 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     marginTop: 16,
     gap: 8,
+  },
+  labelInput: {
+    minHeight: 44,
+    paddingHorizontal: 10,
+    borderColor: '#b9c4d1',
+    borderWidth: 1,
+    borderRadius: 6,
+    color: '#202733',
+    fontSize: 16,
   },
   conditionLabel: {
     color: '#444',

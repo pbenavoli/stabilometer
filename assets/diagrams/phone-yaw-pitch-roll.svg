@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1050" viewBox="0 0 1500 1050" role="img" aria-labelledby="title desc">
   <title id="title">Yaw, pitch and roll of a portrait phone</title>
-  <desc id="desc">A portrait phone coordinate frame and three panels showing the Expo DeviceMotion angles: yaw alpha around Z, pitch beta around X, and roll gamma around Y. The app's sway estimate uses pitch and roll, not yaw.</desc>
+  <desc id="desc">A portrait phone coordinate frame and three panels showing the Expo DeviceMotion angles: yaw alpha around Z, pitch beta around X, and roll gamma around Y. The app's sway estimate does not use these Euler angles: they are unreliable when the phone is upright. It uses the gravity direction instead.</desc>
   <defs>
     <marker id="arrow-x" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#c73c42"/></marker>
     <marker id="arrow-y" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#268653"/></marker>
@@ -96,9 +96,9 @@
   <text x="1230" y="782" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#268653">The green axis runs from bottom to top of the screen.</text>
 
   <rect x="50" y="860" width="1400" height="150" rx="16" fill="#eaf1f4" stroke="#d0dce1" stroke-width="2"/>
-  <text x="80" y="900" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="700" fill="#263944">How this app uses the angles</text>
-  <text x="80" y="944" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600" fill="#c73c42">x = H · sin(roll γ) = H · sin(rotation.gamma)</text>
-  <text x="80" y="978" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600" fill="#277da5">y = H · sin(pitch β) = H · sin(rotation.beta)</text>
-  <text x="865" y="943" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#52636e">H = 100 cm in the current model. Yaw α is stored</text>
-  <text x="865" y="970" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#52636e">but is not used to calculate these two distances.</text>
+  <text x="80" y="900" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="700" fill="#263944">Why the app does not use these angles for sway</text>
+  <text x="80" y="944" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600" fill="#c73c42">x = H · (−gx / |g|)  (left / right lean)</text>
+  <text x="80" y="978" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600" fill="#277da5">y = H · (gz / |g|)   (front / back lean)</text>
+  <text x="865" y="943" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#52636e">Held upright, pitch is near 90° (gimbal lock), so these</text>
+  <text x="865" y="970" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#52636e">angles are ill-conditioned. Gravity (g) has no such issue.</text>
 </svg>

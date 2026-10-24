@@ -1,11 +1,47 @@
-import { Alert, Pressable, ScrollView, StyleSheet, Text } from 'react-native';
+import * as Haptics from 'expo-haptics';
+import { useState } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { commonStyles } from '@/components/commonStyles';
 import { SavedSeriesRow } from '@/components/SavedSeriesRow';
+import { SelectionBar } from '@/components/SelectionBar';
 import { useAppState } from '@/context/AppStateProvider';
-import type { SavedSeries } from '@/hooks/useSeriesHistory';
 
 export default function SeriesScreen() {
   const { history, isLoading, clearHistory, updateSeriesLabel, deleteSeries } = useAppState();
+  const [pickedIds, setPickedIds] = useState<string[]>([]);
+
+  // Ignore ids of series that no longer exist.
+  const selectedIds = history.filter((series) => pickedIds.includes(series.id)).map((series) => series.id);
+  const selectionMode = selectedIds.length > 0;
+  const allSelected = history.length > 0 && selectedIds.length === history.length;
+
+  const startSelection = (id: string) => {
+    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setPickedIds([id]);
+  };
+
+  const toggleSelected = (id: string) => {
+    void Haptics.selectionAsync();
+    setPickedIds(selectedIds.includes(id) ? selectedIds.filter((picked) => picked !== id) : [...selectedIds, id]);
+  };
+
+  const toggleAll = () => setPickedIds(allSelected ? [] : history.map((series) => series.id));
+
+  const confirmDeleteSelected = () => {
+    const count = selectedIds.length;
+    Alert.alert(`Remove ${count} series?`, 'This cannot be undone.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Remove',
+        style: 'destructive',
+        onPress: () => {
+          deleteSeries(selectedIds)
+            .then(() => setPickedIds([]))
+            .catch((error: unknown) => console.warn('[series history] Could not delete series:', error));
+        },
+      },
+    ]);
+  };
 
   const confirmClearHistory = () => {
     Alert.alert('Remove all saved series?', 'This cannot be undone.', [
@@ -20,46 +56,48 @@ export default function SeriesScreen() {
     ]);
   };
 
-  const confirmDeleteSeries = (series: SavedSeries) => {
-    Alert.alert('Remove this series?', 'This cannot be undone.', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Remove',
-        style: 'destructive',
-        onPress: () => {
-          void deleteSeries(series.id).catch((error: unknown) =>
-            console.warn('[series history] Could not delete series:', error),
-          );
-        },
-      },
-    ]);
-  };
-
   return (
-    <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
-      <Text style={commonStyles.title}>Saved series</Text>
-      {isLoading && <Text style={commonStyles.subtitle}>Loading saved series...</Text>}
-      {!isLoading && history.length === 0 && (
-        <Text style={commonStyles.subtitle}>Complete a series to save it here.</Text>
-      )}
-      {history.map((savedSeries) => (
-        <SavedSeriesRow
-          key={savedSeries.id}
-          series={savedSeries}
-          onLabelChange={updateSeriesLabel}
-          onDelete={confirmDeleteSeries}
+    <View style={styles.screen}>
+      {selectionMode && (
+        <SelectionBar
+          count={selectedIds.length}
+          allSelected={allSelected}
+          onCancel={() => setPickedIds([])}
+          onToggleAll={toggleAll}
+          onDelete={confirmDeleteSelected}
         />
-      ))}
-      {history.length > 0 && (
-        <Pressable style={styles.destructiveButton} onPress={confirmClearHistory}>
-          <Text style={commonStyles.buttonText}>Remove all saved series</Text>
-        </Pressable>
       )}
-    </ScrollView>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
+        <Text style={commonStyles.title}>Saved series</Text>
+        {isLoading && <Text style={commonStyles.subtitle}>Loading saved series...</Text>}
+        {!isLoading && history.length === 0 && (
+          <Text style={commonStyles.subtitle}>Complete a series to save it here.</Text>
+        )}
+        {history.map((savedSeries) => (
+          <SavedSeriesRow
+            key={savedSeries.id}
+            series={savedSeries}
+            selectionMode={selectionMode}
+            selected={selectedIds.includes(savedSeries.id)}
+            onToggleSelected={toggleSelected}
+            onStartSelection={startSelection}
+            onLabelChange={updateSeriesLabel}
+          />
+        ))}
+        {history.length > 0 && !selectionMode && (
+          <Pressable style={styles.destructiveButton} onPress={confirmClearHistory}>
+            <Text style={commonStyles.buttonText}>Remove all saved series</Text>
+          </Pressable>
+        )}
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   scrollView: {
     flex: 1,
   },

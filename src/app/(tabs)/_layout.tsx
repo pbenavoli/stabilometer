@@ -17,6 +17,7 @@ export default function TabLayout() {
       <Tabs.Screen name="index" options={{ title: 'Measure', headerTitle: 'Stabilometer' }} />
       <Tabs.Screen name="series" options={{ title: 'Series', headerTitle: 'Saved series' }} />
       <Tabs.Screen name="chart" options={{ title: 'Chart', headerTitle: 'Stability chart' }} />
+      <Tabs.Screen name="live" options={{ title: 'Live', headerTitle: 'Live angles' }} />
     </Tabs>
   );
 }

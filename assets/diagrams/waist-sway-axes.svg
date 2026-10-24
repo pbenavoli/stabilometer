@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="930" viewBox="0 0 1400 930" role="img" aria-labelledby="title desc">
   <title id="title">Phone tilt projected into sway axes at navel height</title>
-  <desc id="desc">A front view shows an upright phone at the navel and the left-right sway axis. A top-down waist-level view shows left-right x and front-back y axes, with roll mapped to x and pitch mapped to y. Formulas match the app's current code.</desc>
+  <desc id="desc">A front view shows an upright phone at the navel and the left-right sway axis. A top-down waist-level view shows left-right x and front-back y axes, with left-right x and front-back y mapped from the phone's lean relative to gravity. Formulas match the app's current code.</desc>
   <defs>
     <marker id="arrow-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#cf3d42"/>
@@ -63,9 +63,9 @@
   <line x1="824" y1="357" x2="1180" y2="357" stroke="#cf3d42" stroke-width="4" marker-start="url(#arrow-red)" marker-end="url(#arrow-red)"/>
   <line x1="1002" y1="236" x2="1002" y2="557" stroke="#2478a8" stroke-width="4" marker-start="url(#arrow-blue)" marker-end="url(#arrow-blue)"/>
   <circle cx="1002" cy="357" r="8" fill="#ffffff" stroke="#263944" stroke-width="3"/>
-  <text x="1002" y="391" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="700" fill="#cf3d42">x / roll (γ): left ↔ right</text>
-  <text x="1020" y="246" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="700" fill="#2478a8">y / pitch (β)</text>
-  <text x="1020" y="270" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#2478a8">front ↕ back</text>
+  <text x="1002" y="391" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="700" fill="#cf3d42">x: lean left ↔ right</text>
+  <text x="1020" y="246" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="700" fill="#2478a8">y: lean front ↕ back</text>
+  <text x="1020" y="270" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#2478a8">(+ forward)</text>
 
   <path d="M1182 600 L1182 551" stroke="#cf3d42" stroke-width="3" marker-end="url(#arrow-red)"/>
   <text x="1202" y="571" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" fill="#cf3d42">x</text>
@@ -75,9 +75,9 @@
   <text x="1204" y="652" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" fill="#52636e">in the waist-level plane</text>
 
   <rect x="50" y="812" width="1300" height="88" rx="14" fill="#eaf1f4" stroke="#d0dce1" stroke-width="2"/>
-  <text x="78" y="847" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="#263944">Current code (angles in radians; pivot height H = 100 cm):</text>
-  <text x="78" y="881" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600" fill="#cf3d42">x = H · sin(roll γ)</text>
-  <text x="430" y="881" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600" fill="#2478a8">y = H · sin(pitch β)</text>
+  <text x="78" y="847" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="#263944">Current code (g = gravity in the phone frame; pivot height H = 100 cm):</text>
+  <text x="78" y="881" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600" fill="#cf3d42">x = H · (−gx / |g|)</text>
+  <text x="430" y="881" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600" fill="#2478a8">y = H · (gz / |g|)</text>
   <text x="880" y="850" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#52636e">For overlays, each trial's path is shifted</text>
   <text x="880" y="874" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#52636e">so its own mean lies at the origin.</text>
 </svg>
