@@ -56,7 +56,7 @@ The iOS internal distribution build may require registering the device with the 
 
 ## Using the app
 
-1. On the **Measure** tab, choose `Without orthosis` or `With orthosis`.
+1. On the **Measure** tab, choose `Without orthosis` or `With orthosis`. Optionally type a **Default series label**, which is saved on the device and given to every new series (you can still edit a series' label later on the **Series** tab).
 2. Open **Options** if you want to change trials per series or trial duration. Options cannot be changed mid-series.
 3. Place the phone upright against the abdomen at navel height, screen facing outward. Tap start, wait through the countdown, and hold the phone steadily during the recording. The trial ends automatically at the selected duration; it can also be stopped manually.
 4. Continue until the configured number of trials is complete. The completed series is saved locally.

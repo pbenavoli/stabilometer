@@ -10,6 +10,7 @@ import { useDeviceMotion } from '@/hooks/useDeviceMotion';
 import {
   DURATION_STEP_S,
   MAX_DURATION_S,
+  MAX_DEFAULT_LABEL_LENGTH,
   MAX_TRIALS,
   MIN_DURATION_S,
   MIN_TRIALS,
@@ -25,7 +26,6 @@ export default function MeasureScreen() {
   const { playStart, playEnd } = useSessionSounds();
   const [trials, setTrials] = useState<StabilityMetrics[]>([]);
   const [condition, setCondition] = useState<MeasurementCondition>('Without orthosis');
-  const [defaultLabel, setDefaultLabel] = useState('');
   const [showOptions, setShowOptions] = useState(false);
   const session = useMotionSession(subscribe, {
     durationMs: options.durationS * 1000,
@@ -73,14 +73,14 @@ export default function MeasureScreen() {
   useEffect(() => {
     if (seriesComplete && aggregate && !savedSeriesRef.current) {
       savedSeriesRef.current = true;
-      void saveSeries(condition, aggregate, trials, options.durationS, defaultLabel).catch((error: unknown) =>
+      void saveSeries(condition, aggregate, trials, options.durationS, options.defaultLabel).catch((error: unknown) =>
         console.warn('[series history] Could not save series:', error),
       );
     }
     if (!seriesComplete) {
       savedSeriesRef.current = false;
     }
-  }, [aggregate, condition, defaultLabel, options.durationS, saveSeries, seriesComplete, trials]);
+  }, [aggregate, condition, options.defaultLabel, options.durationS, saveSeries, seriesComplete, trials]);
 
   const startNewSeries = () => {
     setTrials([]);
@@ -153,17 +153,17 @@ export default function MeasureScreen() {
               <Text style={styles.conditionLabel}>Default series label</Text>
               <TextInput
                 accessibilityLabel="Default series label"
-                maxLength={60}
+                maxLength={MAX_DEFAULT_LABEL_LENGTH}
                 placeholder="Optional, applied to the new series"
                 returnKeyType="done"
                 style={styles.labelInput}
-                value={defaultLabel}
-                onChangeText={setDefaultLabel}
+                value={options.defaultLabel}
+                onChangeText={(defaultLabel) => updateOptions({ ...options, defaultLabel })}
               />
             </View>
           ) : (
             <Text style={styles.conditionStatus}>
-              {defaultLabel.trim() ? `${condition} · ${defaultLabel.trim()}` : condition}
+              {options.defaultLabel.trim() ? `${condition} · ${options.defaultLabel.trim()}` : condition}
             </Text>
           )}
           <Pressable style={styles.bigButton} onPress={handleStart}>

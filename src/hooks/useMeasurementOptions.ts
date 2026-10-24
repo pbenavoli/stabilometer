@@ -8,15 +8,19 @@ export const MAX_TRIALS = 5;
 export const MIN_DURATION_S = 5;
 export const MAX_DURATION_S = 120;
 export const DURATION_STEP_S = 5;
+export const MAX_DEFAULT_LABEL_LENGTH = 60;
 
 export interface MeasurementOptions {
   trialsPerSeries: number;
   durationS: number;
+  /** Label given to each newly saved series; may be empty. */
+  defaultLabel: string;
 }
 
 export const DEFAULT_MEASUREMENT_OPTIONS: MeasurementOptions = {
   trialsPerSeries: 3,
   durationS: 30,
+  defaultLabel: '',
 };
 
 function clampInteger(value: unknown, min: number, max: number, fallback: number) {
@@ -38,6 +42,10 @@ function sanitize(value: Partial<MeasurementOptions>): MeasurementOptions {
       MAX_DURATION_S,
       DEFAULT_MEASUREMENT_OPTIONS.durationS,
     ),
+    defaultLabel:
+      typeof value.defaultLabel === 'string'
+        ? value.defaultLabel.slice(0, MAX_DEFAULT_LABEL_LENGTH)
+        : DEFAULT_MEASUREMENT_OPTIONS.defaultLabel,
   };
 }
 
