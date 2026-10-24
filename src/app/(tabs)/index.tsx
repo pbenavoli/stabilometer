@@ -18,6 +18,7 @@ import {
 import { useMotionSession } from '@/hooks/useMotionSession';
 import type { MeasurementCondition } from '@/hooks/useSeriesHistory';
 import { useSessionSounds } from '@/hooks/useSessionSounds';
+import { strongBuzz } from '@/lib/haptics';
 import { aggregateTrials, computeStabilityMetrics, type StabilityMetrics } from '@/lib/stability';
 
 export default function MeasureScreen() {
@@ -38,7 +39,7 @@ export default function MeasureScreen() {
 
   const handleStart = () => {
     Keyboard.dismiss();
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    strongBuzz();
     setIsMeasuring(true);
     session.start();
   };
@@ -166,7 +167,10 @@ export default function MeasureScreen() {
               {options.defaultLabel.trim() ? `${condition} · ${options.defaultLabel.trim()}` : condition}
             </Text>
           )}
-          <Pressable style={styles.bigButton} onPress={handleStart}>
+          <Pressable
+            style={styles.bigButton}
+            onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+            onPress={handleStart}>
             <Text style={styles.bigButtonText}>
               {trials.length === 0
                 ? 'Tap anywhere below\nto start new series'
