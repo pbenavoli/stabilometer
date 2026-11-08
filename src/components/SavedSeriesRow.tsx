@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { ReadoutRow } from '@/components/ReadoutRow';
-import type { SavedSeries } from '@/hooks/useSeriesHistory';
+import { seriesPivotHeightCm, type SavedSeries } from '@/hooks/useSeriesHistory';
 import { SWAY_MODEL_VERSION } from '@/lib/stability';
 
 export function SavedSeriesRow({
@@ -64,6 +64,7 @@ export function SavedSeriesRow({
           {typeof series.durationS === 'number' && (
             <ReadoutRow label="Trial duration" value={`${series.durationS} s`} />
           )}
+          <ReadoutRow label="Ankle-to-phone height" value={`${seriesPivotHeightCm(series)} cm`} />
           <ReadoutRow label="Mean sway area" value={`${series.aggregate.meanSwayAreaCm2.toFixed(1)} cm²`} />
           <ReadoutRow label="Area SD across trials" value={`${series.aggregate.sdSwayAreaCm2.toFixed(1)} cm²`} />
           <ReadoutRow label="Area consistency (CV)" value={`${series.aggregate.cvPercent.toFixed(0)}%`} />

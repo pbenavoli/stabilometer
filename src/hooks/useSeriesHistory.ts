@@ -1,7 +1,7 @@
 import Storage from 'expo-sqlite/kv-store';
 import { useEffect, useRef, useState } from 'react';
 import type { StabilityMetrics, TrialAggregate, TrialShape } from '@/lib/stability';
-import { SWAY_MODEL_VERSION, toTrialShape } from '@/lib/stability';
+import { DEFAULT_PIVOT_HEIGHT_CM, SWAY_MODEL_VERSION, toTrialShape } from '@/lib/stability';
 
 const STORAGE_KEY = 'stabilometer.series-history.v1';
 
@@ -16,11 +16,15 @@ export interface SavedSeries {
   trialAreasCm2: number[];
   trialPathLengthsMm?: number[];
   durationS?: number;
+  /** Older series were recorded using the fixed 100 cm height. */
+  pivotHeightCm?: number;
   /** Centred paths and ellipses used by the chart; absent on series saved before charting existed. */
   trialShapes?: TrialShape[];
   /** Version of the sway maths used; absent or older means the values came from the flawed Euler-angle model. */
   swayModel?: number;
 }
+
+export const seriesPivotHeightCm = (series: SavedSeries) => series.pivotHeightCm ?? DEFAULT_PIVOT_HEIGHT_CM;
 
 function parseHistory(value: string | null): SavedSeries[] {
   if (!value) return [];
@@ -76,6 +80,7 @@ export function useSeriesHistory() {
     aggregate: TrialAggregate,
     trials: StabilityMetrics[],
     durationS: number,
+    pivotHeightCm: number,
     label?: string,
   ) {
     const trimmedLabel = label?.trim();
@@ -88,6 +93,7 @@ export function useSeriesHistory() {
       trialAreasCm2: trials.map((trial) => trial.swayAreaCm2),
       trialPathLengthsMm: trials.map((trial) => trial.pathLengthCm * 10),
       durationS,
+      pivotHeightCm,
       trialShapes: trials.map(toTrialShape),
       swayModel: SWAY_MODEL_VERSION,
     };

@@ -3,12 +3,8 @@ import type { MotionSample } from '@/types/motion';
 
 /**
  * Approximate distance (cm) from the ankles (sway pivot point) to the phone,
- * used to convert the body's lean into an equivalent lateral/anterior-posterior
- * displacement — the same inverted-pendulum approximation used in clinical
- * posturography when deriving sway from trunk-mounted sensors instead of a
- * force platform. This is a stand-in for the person's real height and can be
- * made configurable later; it only rescales the numbers, it doesn't change
- * how two sessions compare to each other.
+ * used as the default to convert the body's lean into an equivalent
+ * lateral/anterior-posterior displacement.
  */
 export const DEFAULT_PIVOT_HEIGHT_CM = 100;
 
@@ -70,7 +66,7 @@ export function sampleToSwayPoint(sample: MotionSample, pivotHeightCm: number): 
 
 export function computeStabilityMetrics(
   samples: MotionSample[],
-  pivotHeightCm: number = DEFAULT_PIVOT_HEIGHT_CM,
+  pivotHeightCm: number,
 ): StabilityMetrics | null {
   if (samples.length < 2) return null;
 

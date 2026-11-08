@@ -1,5 +1,6 @@
 import Storage from 'expo-sqlite/kv-store';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { DEFAULT_PIVOT_HEIGHT_CM } from '@/lib/stability';
 
 const STORAGE_KEY = 'stabilometer.measurement-options.v1';
 
@@ -13,6 +14,7 @@ export const MAX_DEFAULT_LABEL_LENGTH = 60;
 export interface MeasurementOptions {
   trialsPerSeries: number;
   durationS: number;
+  pivotHeightCm: number;
   /** Label given to each newly saved series; may be empty. */
   defaultLabel: string;
 }
@@ -20,6 +22,7 @@ export interface MeasurementOptions {
 export const DEFAULT_MEASUREMENT_OPTIONS: MeasurementOptions = {
   trialsPerSeries: 3,
   durationS: 30,
+  pivotHeightCm: DEFAULT_PIVOT_HEIGHT_CM,
   defaultLabel: '',
 };
 
@@ -42,6 +45,10 @@ function sanitize(value: Partial<MeasurementOptions>): MeasurementOptions {
       MAX_DURATION_S,
       DEFAULT_MEASUREMENT_OPTIONS.durationS,
     ),
+    pivotHeightCm:
+      typeof value.pivotHeightCm === 'number' && Number.isFinite(value.pivotHeightCm) && value.pivotHeightCm > 0
+        ? value.pivotHeightCm
+        : DEFAULT_PIVOT_HEIGHT_CM,
     defaultLabel:
       typeof value.defaultLabel === 'string'
         ? value.defaultLabel.slice(0, MAX_DEFAULT_LABEL_LENGTH)
@@ -61,6 +68,7 @@ function parseOptions(value: string | null): MeasurementOptions {
 
 export function useMeasurementOptions() {
   const [options, setOptions] = useState<MeasurementOptions>(DEFAULT_MEASUREMENT_OPTIONS);
+  const writeQueueRef = useRef<Promise<void>>(Promise.resolve());
 
   useEffect(() => {
     let isMounted = true;
@@ -79,9 +87,9 @@ export function useMeasurementOptions() {
   function updateOptions(next: MeasurementOptions) {
     const sanitized = sanitize(next);
     setOptions(sanitized);
-    Storage.setItem(STORAGE_KEY, JSON.stringify(sanitized)).catch((error: unknown) =>
-      console.warn('[measurement options] Could not save:', error),
-    );
+    writeQueueRef.current = writeQueueRef.current
+      .then(() => Storage.setItem(STORAGE_KEY, JSON.stringify(sanitized)))
+      .catch((error: unknown) => console.warn('[measurement options] Could not save:', error));
   }
 
   return { options, updateOptions };

@@ -4,9 +4,9 @@ import { useCallback, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { commonStyles } from '@/components/commonStyles';
 import { ReadoutRow } from '@/components/ReadoutRow';
+import { useAppState } from '@/context/AppStateProvider';
 import { useDeviceMotion } from '@/hooks/useDeviceMotion';
 import { gravityOf, leanDegrees, tiltSines } from '@/lib/orientation';
-import { DEFAULT_PIVOT_HEIGHT_CM } from '@/lib/stability';
 
 const DISPLAY_INTERVAL_MS = 100;
 const LEVEL_FULL_SCALE_DEG = 5;
@@ -22,6 +22,7 @@ const clamp = (value: number) => Math.max(-1, Math.min(1, value));
 
 export default function LiveScreen() {
   const { status, subscribe } = useDeviceMotion();
+  const { options } = useAppState();
   const { width } = useWindowDimensions();
   const [reading, setReading] = useState<DeviceMotionMeasurement | null>(null);
   const latestRef = useRef<DeviceMotionMeasurement | null>(null);
@@ -85,12 +86,12 @@ export default function LiveScreen() {
             <ReadoutRow label="Left / right" value={lean ? direction(lean.lateralDeg, 'right', 'left') : '—'} />
             <ReadoutRow label="Front / back" value={lean ? direction(lean.forwardDeg, 'forward', 'back') : '—'} />
             <ReadoutRow
-              label={`Sway at ${DEFAULT_PIVOT_HEIGHT_CM} cm: left / right`}
-              value={tilt ? `${(DEFAULT_PIVOT_HEIGHT_CM * tilt.right).toFixed(2)} cm` : '—'}
+              label={`Sway at ${options.pivotHeightCm} cm: left / right`}
+              value={tilt ? `${(options.pivotHeightCm * tilt.right).toFixed(2)} cm` : '—'}
             />
             <ReadoutRow
-              label={`Sway at ${DEFAULT_PIVOT_HEIGHT_CM} cm: front / back`}
-              value={tilt ? `${(DEFAULT_PIVOT_HEIGHT_CM * tilt.forward).toFixed(2)} cm` : '—'}
+              label={`Sway at ${options.pivotHeightCm} cm: front / back`}
+              value={tilt ? `${(options.pivotHeightCm * tilt.forward).toFixed(2)} cm` : '—'}
             />
           </View>
 

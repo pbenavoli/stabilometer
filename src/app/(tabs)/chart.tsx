@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } fr
 import { commonStyles } from '@/components/commonStyles';
 import { type ChartLayer, getChartScale, OverlayChart } from '@/components/OverlayChart';
 import { useAppState } from '@/context/AppStateProvider';
-import type { MeasurementCondition, SavedSeries } from '@/hooks/useSeriesHistory';
+import { seriesPivotHeightCm, type MeasurementCondition, type SavedSeries } from '@/hooks/useSeriesHistory';
 import { SWAY_MODEL_VERSION } from '@/lib/stability';
 
 const CONDITIONS = ['Without orthosis', 'With orthosis'] as const;
@@ -21,7 +21,7 @@ const isChartable = (series: SavedSeries) =>
 const seriesName = (series: SavedSeries) => series.label?.trim() || new Date(series.recordedAt).toLocaleString();
 
 const seriesSummary = (series: SavedSeries) =>
-  `${series.aggregate.count} trials · ${series.durationS} s · mean area ${series.aggregate.meanSwayAreaCm2.toFixed(1)} cm²`;
+  `${series.aggregate.count} trials · ${series.durationS} s · height ${seriesPivotHeightCm(series)} cm · mean area ${series.aggregate.meanSwayAreaCm2.toFixed(1)} cm²`;
 
 export default function ChartScreen() {
   const { history, chartSelection, setChartSeries, clearChart } = useAppState();
@@ -130,6 +130,11 @@ export default function ChartScreen() {
             Estimated sway in cm, grid every {scale.gridStepCm} cm. Each trial is centred on its own mean; solid lines
             are paths, dashed outlines are 95% sway ellipses.
           </Text>
+          {selectedWithout && selectedWith && seriesPivotHeightCm(selectedWithout) !== seriesPivotHeightCm(selectedWith) && (
+            <Text style={styles.hint}>
+              These series use different ankle-to-phone heights, which affects the estimated sway. Compare with care.
+            </Text>
+          )}
           {CONDITIONS.map((condition) => {
             const series = selected[condition];
             if (!series) return null;

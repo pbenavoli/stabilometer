@@ -19,6 +19,7 @@ import { useMotionSession } from '@/hooks/useMotionSession';
 import type { MeasurementCondition } from '@/hooks/useSeriesHistory';
 import { useSessionSounds } from '@/hooks/useSessionSounds';
 import { strongBuzz } from '@/lib/haptics';
+import { parsePivotHeight } from '@/lib/pivotHeight';
 import { aggregateTrials, computeStabilityMetrics, type StabilityMetrics } from '@/lib/stability';
 
 export default function MeasureScreen() {
@@ -28,6 +29,9 @@ export default function MeasureScreen() {
   const [trials, setTrials] = useState<StabilityMetrics[]>([]);
   const [condition, setCondition] = useState<MeasurementCondition>('Without orthosis');
   const [showOptions, setShowOptions] = useState(false);
+  const [heightInput, setHeightInput] = useState<string | null>(null);
+  const heightValue = parsePivotHeight(heightInput ?? String(options.pivotHeightCm));
+
   const session = useMotionSession(subscribe, {
     durationMs: options.durationS * 1000,
     onRecordingStart: () => playStart(trials.length + 1),
@@ -38,7 +42,11 @@ export default function MeasureScreen() {
   });
 
   const handleStart = () => {
+    if (heightValue === null) return;
     Keyboard.dismiss();
+    if (heightValue !== options.pivotHeightCm) {
+      updateOptions({ ...options, pivotHeightCm: heightValue });
+    }
     strongBuzz();
     setIsMeasuring(true);
     session.start();
@@ -50,8 +58,8 @@ export default function MeasureScreen() {
   };
 
   const metrics = useMemo(
-    () => (session.state === 'done' ? computeStabilityMetrics(session.samples) : null),
-    [session.state, session.samples],
+    () => (session.state === 'done' ? computeStabilityMetrics(session.samples, options.pivotHeightCm) : null),
+    [session.state, session.samples, options.pivotHeightCm],
   );
 
   const recordedThisTrialRef = useRef(false);
@@ -74,14 +82,14 @@ export default function MeasureScreen() {
   useEffect(() => {
     if (seriesComplete && aggregate && !savedSeriesRef.current) {
       savedSeriesRef.current = true;
-      void saveSeries(condition, aggregate, trials, options.durationS, options.defaultLabel).catch((error: unknown) =>
-        console.warn('[series history] Could not save series:', error),
+      void saveSeries(condition, aggregate, trials, options.durationS, options.pivotHeightCm, options.defaultLabel).catch(
+        (error: unknown) => console.warn('[series history] Could not save series:', error),
       );
     }
     if (!seriesComplete) {
       savedSeriesRef.current = false;
     }
-  }, [aggregate, condition, options.defaultLabel, options.durationS, saveSeries, seriesComplete, trials]);
+  }, [aggregate, condition, options.defaultLabel, options.durationS, options.pivotHeightCm, saveSeries, seriesComplete, trials]);
 
   const startNewSeries = () => {
     setTrials([]);
@@ -161,6 +169,23 @@ export default function MeasureScreen() {
                 value={options.defaultLabel}
                 onChangeText={(defaultLabel) => updateOptions({ ...options, defaultLabel })}
               />
+              <Text style={styles.conditionLabel}>Ankle-to-phone height (cm)</Text>
+              <Text style={styles.heightHint}>Measure from your ankle to the phone at navel height. Default: 100 cm.</Text>
+              <TextInput
+                accessibilityLabel="Ankle-to-phone height in centimeters"
+                keyboardType="decimal-pad"
+                maxLength={8}
+                style={styles.labelInput}
+                value={heightInput ?? String(options.pivotHeightCm)}
+                onChangeText={setHeightInput}
+                onBlur={() => {
+                  if (heightValue !== null && heightValue !== options.pivotHeightCm) {
+                    updateOptions({ ...options, pivotHeightCm: heightValue });
+                  }
+                  if (heightValue !== null) setHeightInput(null);
+                }}
+              />
+              {heightValue === null && <Text style={styles.warning}>Enter a positive height in centimeters.</Text>}
             </View>
           ) : (
             <Text style={styles.conditionStatus}>
@@ -168,7 +193,10 @@ export default function MeasureScreen() {
             </Text>
           )}
           <Pressable
-            style={styles.bigButton}
+            accessibilityRole="button"
+            accessibilityState={{ disabled: trials.length === 0 && heightValue === null }}
+            disabled={trials.length === 0 && heightValue === null}
+            style={[styles.bigButton, trials.length === 0 && heightValue === null && styles.disabledButton]}
             onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
             onPress={handleStart}>
             <Text style={styles.bigButtonText}>
@@ -290,6 +318,13 @@ const styles = StyleSheet.create({
     color: '#444',
     fontSize: 14,
     fontWeight: '600',
+  },
+  heightHint: {
+    color: '#666',
+    fontSize: 13,
+  },
+  disabledButton: {
+    opacity: 0.5,
   },
   segmentedControl: {
     flexDirection: 'row',
