@@ -1,5 +1,7 @@
 # Stabilometer
 
+[Français](./README.fr.md)
+
 Stabilometer is an Expo / React Native app for recording and comparing phone-motion-based estimates of postural sway, with and without an orthosis. It is intended for exploratory comparison, not diagnosis or clinical decision-making.
 
 ## Features
@@ -12,6 +14,7 @@ Stabilometer is an Expo / React Native app for recording and comparing phone-mot
 - Overlay chart comparing one `Without orthosis` series and one `With orthosis` series of the same duration. Paths and 95% ellipse outlines are shown in red and green respectively.
 - Local options, series history, multi-select deletion, and clear-all controls.
 - A **Live** tab that shows the current lean angles, a bubble level, and the raw yaw/pitch/roll values, for checking the sensor and the axis directions.
+- An **About** tab showing the application version and GPL license notice.
 
 ## Requirements
 
@@ -99,3 +102,5 @@ node --test tests/pivot-height.test.cjs
 
 Expo SDK-compatible dependencies are listed in `package.json` and pinned by `package-lock.json`.
 Web output is explicitly kept as a single-page bundle with synchronous routes, preserving the SDK 57 defaults.
+
+The application version displayed in **About** comes from `expo.version` in `app.json` (currently `1.0.0`). Update it for releases; `package.json` has a separate npm package version.

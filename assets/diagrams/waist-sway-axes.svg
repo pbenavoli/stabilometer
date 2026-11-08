@@ -1,3 +1,19 @@
+<!--
+Copyright (C) 2026 Patrick Benavoli
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://gnu.org>.
+-->
 <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="930" viewBox="0 0 1400 930" role="img" aria-labelledby="title desc">
   <title id="title">Phone tilt projected into sway axes at navel height</title>
   <desc id="desc">A front view shows an upright phone at the navel and the left-right sway axis. A top-down waist-level view shows left-right x and front-back y axes, with left-right x and front-back y mapped from the phone's lean relative to gravity. Formulas match the app's current code.</desc>
